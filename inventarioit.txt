@@ -1,0 +1,65 @@
+
+
+Ventanas
+==================
+Activos
+HistorialMantenimiento
+Data 
+
+
+Tabla : Activo
+-----------------------------
+Campo / Tipo
+-----------------------------
+-----------------------------
+
+id (int)
+marca (varchar) //DELL, ACER, HP, ADATA
+modelo (varchar)
+serial (varchar)
+tipo (varchar)  // Monitor, CPU, Data, UPS, Impresora, Otro
+discoduro (varchar) //64GB SSD, 128GB SSD, 256GB SSD, 512GB SSD, 1TB SSD, 128GB HDD, 256GB HDD, 512GB HDD, 1TB HDD, 2 TB HDD 
+ram (varchar) //2GB, 4GB, 6GB, 8GB
+procesador (varchar)
+idUbicacion (int) //Lab1, Lab2, Aula201, Aula217, bodega3
+estado (varchar)  // malo, regular, bueno, excelente, Descarte
+asignado (varchar) // Persona1, Persona2, descarte
+
+
+
+Tabla : Activo
+-----------------------------
+Campo / Tipo
+-----------------------------
+id (int)
+marca (varchar) //DELL, ACER, HP, ADATA
+modelo (varchar)
+
+
+Tabla : Mantenimiento
+-----------------------------
+Campo / Tipo
+-----------------------------
+id (int)
+tipo (varchar)
+descripcion (varchar)
+fecha (date)
+
+
+Tabla : Mantenimiento_Activo
+-----------------------------
+Campo / Tipo
+-----------------------------
+idMantenimiento int
+idActivo int
+
+
+Tabla : Data
+-----------------------------
+Campo / Tipo
+-----------------------------
+
+tipo (varchar) // Marca, Ubicaciones, Condiciones
+valor (varchar)
+
+

@@ -1,6 +1,10 @@
 <script setup>
 import dayjs from "dayjs";
 
+definePageMeta({
+	middleware: "auth",
+});
+
 const client = useSupabaseClient();
 
 let dataCompleta = [];

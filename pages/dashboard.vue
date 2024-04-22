@@ -24,10 +24,15 @@ async function cargarInformacionValores() {
 }
 
 
+cargarInformacionValores();
+
 </script>
 
 <template>
-	<div style="width: 100%">
+	<div style="width: 100%" :key="activosTotales" v-if="activosTotales.length == 0">
+		<h3 style="width: 100%; text-align: center;">Cargando...</h3>
+	</div>
+	<div style="width: 100%" v-else>
 		<br />
 
 		<div style="display: grid; grid-template-columns: 40% 60%">

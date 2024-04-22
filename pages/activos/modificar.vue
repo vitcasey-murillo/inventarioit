@@ -1,4 +1,8 @@
 <script setup>
+definePageMeta({
+	middleware: "auth",
+});
+
 const client = useSupabaseClient();
 
 const params = new URLSearchParams(location.search);

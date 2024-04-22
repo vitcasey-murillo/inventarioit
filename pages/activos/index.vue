@@ -1,5 +1,10 @@
 <script setup>
 import { DataTable } from "~/DataTableImports";
+
+definePageMeta({
+	middleware: "auth",
+});
+
 const client = useSupabaseClient();
 
 const columnas = ref([]);
@@ -109,11 +114,11 @@ cargarInformacionValores();
 		<NuxtLink class="btn btn-success" href="/activos/agregar">Agregar Activo</NuxtLink>
 
 		<div class="col-12 d-flex" style="justify-content: flex-end; align-items: flex-end; flex-direction: column">
-			<label class="" style="width: fit-content">
+			<label style="width: fit-content">
 				<input type="checkbox" v-model="checkColumnaOpciones" @change="mostrarOpciones()" />
 				Ver Columna Opciones
 			</label>
-			<label class="">
+			<label style="width: fit-content">
 				<input type="checkbox" v-model="checkRegistrosDescartes" @change="mostrarDescartes()" />
 				Ver Registros Descarte
 			</label>

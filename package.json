@@ -19,6 +19,7 @@
 		"vue-tsc": "^1.8.22"
 	},
 	"dependencies": {
+		"chart.js": "^4.4.2",
 		"datatables.net": "^1.13.8",
 		"datatables.net-bs5": "^1.13.8",
 		"datatables.net-buttons-bs5": "^2.4.2",
@@ -27,6 +28,7 @@
 		"dayjs": "^1.11.10",
 		"jszip": "^3.10.1",
 		"pdfmake": "^0.2.8",
-		"primevue": "^3.43.0"
+		"primevue": "^3.43.0",
+		"vue-chartjs": "^5.3.1"
 	}
 }

@@ -37,7 +37,7 @@ async function signIn() {
 async function resetPass() {
 	try {
 		const { data, error } = await client.auth.resetPasswordForEmail(inputEmail.value, {
-			redirectTo: "http://localhost:3000/register_newpass",
+			redirectTo: `${location.origin}/register_newpass`,
 		});
 
 		if (error) {

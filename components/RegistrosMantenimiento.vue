@@ -25,24 +25,35 @@ const columnas = [
 	{ title: "Estado", data: "estado" },
 ];
 
+const infoInventario = ref({});
+
+async function cargarInformacionGeneral() {
+	const { data } = await client.from("mantenimiento").select("*").eq("id", props.idMantenimiento);
+	if (data != null) {
+		infoInventario.value = data[0];
+	}
+}
+
 async function cargarInformacionValores() {
-	console.log("idMantenimiento", props.idMantenimiento);
 	const { data } = await client.from("desglose_mantenimiento").select("*").eq("idMantenimiento", props.idMantenimiento);
 
 	if (data != null) {
 		activosTotales = data;
 		activosMostrados.value = data;
-
-		//console.log("columnas", columnas);
-		console.log("activosMostrados", activosMostrados.value);
 	}
 }
-cargarInformacionValores();
+if (props.idMantenimiento != 0) {
+	cargarInformacionGeneral();
+	cargarInformacionValores();
+}
 </script>
 
 <template>
 	<div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">0tra cosa</h5>
+		<h5 class="modal-title" id="exampleModalLabel">
+			Detalle de Mantenimiento: <br />
+			{{ !!infoInventario ? `${infoInventario.tipo} - ${infoInventario.descripcion}` : "" }}
+		</h5>
 		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	</div>
 	<div class="modal-body">

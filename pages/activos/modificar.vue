@@ -43,7 +43,6 @@ cargarDataParametros();
 
 async function cargarDataActivo() {
 	const { data } = await client.from("activo").select("*").match({ id: idActivo });
-	console.log("data", data);
 	modificarActivo.value = data[0];
 }
 

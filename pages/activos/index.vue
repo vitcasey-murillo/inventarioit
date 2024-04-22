@@ -21,15 +21,6 @@ async function cargarInformacionValores() {
 	if (data != null) {
 		activosTotales = data;
 		activosMostrados.value = data;
-
-		//no sé porque, pero requiere el setTimeOut
-		setTimeout(() => {
-			for (let btn of document.querySelectorAll("button[boton-opciones]")) {
-				btn.addEventListener("click", (e) => {
-					seleccionar(e.target.getAttribute("data"));
-				});
-			}
-		}, 100);
 	}
 }
 
@@ -54,6 +45,15 @@ function seleccionar(id) {
 	//por ahora nada
 	navigateTo("/activos/modificar/?idActivo=" + id);
 }
+
+onMounted(() => {
+	document.addEventListener("click", (e) => {
+		if (e.target.hasAttribute("boton-opciones")) {
+			//detecta solo los boton opciones
+			seleccionar(e.target.getAttribute("data"));
+		}
+	});
+});
 
 function renderizarBotones(row) {
 	return `<div style="text-align:center"><button class="btn btn-info" boton-opciones data=${row.id}>Seleccionar</button></div>`;

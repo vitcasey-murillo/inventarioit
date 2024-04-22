@@ -34,6 +34,11 @@ async function cargarDataParametros() {
 			else if (x.tipo == "Estado") arrEstado.value.push(x.valor);
 		});
 	}
+
+	arrMarca.value = arrMarca.value.sort((a, b) => a.localeCompare(b));
+	arrUbicacion.value = arrUbicacion.value.sort((a, b) => a.localeCompare(b));
+	arrTipo.value = arrTipo.value.sort((a, b) => a.localeCompare(b));
+	arrEstado.value = arrEstado.value.sort((a, b) => a.localeCompare(b));
 }
 cargarDataParametros();
 

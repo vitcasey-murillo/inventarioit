@@ -41,7 +41,7 @@ async function rutaCambiarContra() {
 
 <template>
 	<Head>
-		<title>Inventarasdasdio IT</title>
+		<title>Inventario IT</title>
 
 		<Link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" crossorigin="anonymous" />
 

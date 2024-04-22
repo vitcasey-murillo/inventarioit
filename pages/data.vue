@@ -16,11 +16,9 @@ let valorInput_Ubicacion = ref("");
 async function cargarInformacionValores() {
 	const { data } = await client.from("data").select("*");
 
-	console.log("data", data);
 	if (data != null) {
 		dataTotal.value = data.sort((a, b) => a.tipo.localeCompare(b.tipo));
 		info.value = dataTotal.value;
-		console.log("info", info.value);
 	}
 }
 

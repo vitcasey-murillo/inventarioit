@@ -5,34 +5,54 @@ definePageMeta({
 
 const client = useSupabaseClient();
 
-const info = ref([]);
 const dataTotal = ref([]);
-
-let valorSelect = "";
-let valorInput = "";
 
 const idMantenimientoMostrado = ref(0);
 
 async function cargarInformacionValores() {
 	const { data } = await client.from("vw_mantenimientos_cantidades").select("*");
 
-	console.log("data", data);
 	if (data != null) {
-		dataTotal.value = data.sort((a, b) => a.tipo.localeCompare(b.tipo));
-		info.value = dataTotal.value;
+		dataTotal.value = data.sort((a, b) => b.id - a.id);
 	}
 }
 
 function seleccionar(id) {
 	idMantenimientoMostrado.value = id;
 
-	console.log("idMantenimientoMostrado", idMantenimientoMostrado.value);
 	var myModal = new bootstrap.Modal(document.getElementById("exampleModal2"), {
 		keyboard: false,
 	});
 	myModal.show();
+}
 
-	//cambiarData
+async function eliminar(id) {
+	if (!confirm("¿Está seguro que desea eliminar este registro?")) {
+		return;
+	}
+
+	let regParaEliminar = dataTotal.value.find((x) => x.id == id);
+	let eliminarActivos = false;
+	let msgDescarte = `Está eliminando un Descarte: \n \npresione 'Aceptar' para eliminarel Registro y los activos \npresone 'Cancelar' para eliminar el Registro, pero mantener los activos`;
+
+	if (regParaEliminar.tipo == "Descarte") {
+		eliminarActivos = confirm(msgDescarte);
+	}
+
+	if (eliminarActivos) {
+		const { data, error } = await client.rpc("eliminar_activos_por_mantenimiento", { p_idmantenimiento: id });
+
+		if (error) console.error("Error eliminando activos:", error);
+		else console.log("Activos eliminados:", data);
+	}
+
+	const { error } = await client.from("mantenimiento").delete().match({ id });
+	if (error == null) {
+		setTimeout(() => {
+			alert("Registro Eliminado!");
+			cargarInformacionValores();
+		}, 0);
+	} else alert(error.message);
 }
 
 cargarInformacionValores();
@@ -49,21 +69,22 @@ cargarInformacionValores();
 		<table class="table table-striped table-bordered">
 			<thead>
 				<tr>
-					<th class="col-2">Fecha</th>
+					<th class="col-1">Fecha</th>
 					<th class="col-2">Tipo</th>
 					<th class="col-6">Descripción</th>
 					<th class="col-1">Cant.</th>
-					<th class="col-1">Opciones</th>
+					<th class="col-2">Opciones</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr v-for="registro in dataTotal">
-					<td class="col-2">{{ registro.fecha }}</td>
+					<td class="col-1">{{ registro.fecha }}</td>
 					<td class="col-2">{{ registro.tipo }}</td>
 					<td class="col-6">{{ registro.descripcion }}</td>
 					<td class="col-1">{{ registro.cantidad }}</td>
-					<td class="col-1">
+					<td class="col-2" style="width: 100%; display: flex; justify-content: space-around">
 						<button class="btn btn-info" @click="seleccionar(registro.id)">Seleccionar</button>
+						<button class="btn btn-danger" @click="eliminar(registro.id)">Eliminar</button>
 					</td>
 				</tr>
 			</tbody>

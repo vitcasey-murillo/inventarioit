@@ -11,7 +11,7 @@ let dataCompleta = [];
 const activos = ref([]);
 
 let objetoMandar = ref({
-	tipo: "Descarte",
+	tipo: "Mantenimiento",
 	descripcion: "",
 	fecha: dayjs().format("YYYY-MM-DD"),
 });
@@ -40,8 +40,6 @@ function filtrar() {
 		}
 	}
 
-	console.log("activos", activos.value);
-
 	const regExpresion = new RegExp(`${campoBusqueda.value}.*`, "i");
 	activos.value = dataCompleta.filter(
 		(x) => regExpresion.test(x.marca) || regExpresion.test(x.modelo) || regExpresion.test(x.serial) || regExpresion.test(x.ubicacion) || regExpresion.test(x.asignado)
@@ -49,13 +47,18 @@ function filtrar() {
 }
 
 async function insertarMantenimiento() {
-	console.log("fecha", objetoMandar.value.fecha);
+	const activosSeleccionados = activos.value.filter((x) => x.seleccionado);
+
+	if (activosSeleccionados.length == 0) {
+		alert("No se ha seleccionado ningún registro.");
+		return;
+	}
 
 	const { data, error } = await client.rpc("insertar_mantenimiento_y_activos", {
 		tipo_param: objetoMandar.value.tipo,
 		descripcion_param: objetoMandar.value.descripcion,
 		fecha_param: objetoMandar.value.fecha.toString(),
-		ids_activos_param: activos.value.filter((x) => x.seleccionado).map((x) => x.id),
+		ids_activos_param: activosSeleccionados.map((x) => x.id),
 	});
 
 	if (error) {
@@ -77,24 +80,24 @@ cargarInformacionValores();
 		</nav>
 
 		<div class="d-flex grupo-procesar">
-			<div class="col-3">
+			<div class="col-2">
 				<label style="width: 100%">
 					<b>Tipo De Mantenimiento</b><br />
 					<select v-model="objetoMandar.tipo" class="form-control">
-						<option value="Descarte">Descarte</option>
 						<option value="Mantenimiento">Mantenimiento</option>
+						<option value="Descarte">Descarte</option>
 					</select>
 				</label>
 			</div>
-			<div class="col-3">
+			<div class="col-6">
 				<b>Descripción</b><br />
 				<textarea style="width: 100%" v-model="objetoMandar.descripcion"> </textarea>
 			</div>
-			<div class="col-3">
+			<div class="col-2">
 				<b>Fecha Realizado:</b><br />
 				<input type="date" class="form-control" v-model="objetoMandar.fecha" />
 			</div>
-			<div class="col-3 d-flex justify-content-center align-items-center">
+			<div class="col-2 d-flex justify-content-center align-items-center">
 				<button class="btn btn-primary" @click="insertarMantenimiento">Procesar</button>
 			</div>
 		</div>

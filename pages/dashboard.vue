@@ -29,19 +29,17 @@ cargarInformacionValores();
 </script>
 
 <template>
-	
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<div class="container-fluid">
-				<p class="text-center" style="width: 100%">DASHBOARD</p>
-			</div>
-		</nav>
 
 	<div style="width: 100%" :key="activosTotales" v-if="activosTotales.length == 0">
 		<h3 style="width: 100%; text-align: center;">Cargando...</h3>
 	</div>
 	<div style="width: 100%" v-else>
 		<br />
-
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
+				<p class="text-center" style="width: 100%">DASHBOARD</p>
+			</div>
+		</nav>
 		<div style="display: grid; grid-template-columns: 40% 60%">
 			<div style="height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 2%"><h3>Equipos por ubicación</h3></div>
 			<ubicacionEquipos :activosTotales="activosTotales" />

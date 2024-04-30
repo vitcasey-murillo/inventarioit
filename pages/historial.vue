@@ -72,7 +72,7 @@ cargarInformacionValores();
 					<th class="col-1">Fecha</th>
 					<th class="col-2">Tipo</th>
 					<th class="col-6">Descripción</th>
-					<th class="col-1">Cantidad.</th>
+					<th class="col-1">Cantidad</th>
 					<th class="col-2">Opciones</th>
 				</tr>
 			</thead>

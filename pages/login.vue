@@ -93,7 +93,7 @@ async function resetPass() {
 			</div>
 
 			<div style="position: absolute; left: 0; bottom: 0">
-				<span> Creado por: W.VcM </span>
+				<span> Creado por: VitM </span>
 			</div>
 		</form>
 	</section>

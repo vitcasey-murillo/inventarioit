@@ -66,7 +66,7 @@ function mostrarOpciones() {
 			{ title: "Modelo", data: "modelo" },
 			{ title: "Serial", data: "serial" },
 			{ title: "Tipo", data: "tipo" },
-			{ title: "Ubicacion", data: "ubicacion" },
+			{ title: "Ubicación", data: "ubicacion" },
 			{ title: "Asignado A", data: "asignado" },
 			{ title: "Estado", data: "estado" },
 			{

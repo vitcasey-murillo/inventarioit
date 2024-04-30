@@ -75,7 +75,7 @@ async function rutaCambiarContra() {
 					</li>
 					<li>
 						<NuxtLink to="/historial" class="nav-link"> Historial <br />
-							Mantentenimiento </NuxtLink>
+							mantenimiento </NuxtLink>
 					</li>
 					<li>
 						<NuxtLink to="/dashboard" class="nav-link"> Dashboard </NuxtLink>

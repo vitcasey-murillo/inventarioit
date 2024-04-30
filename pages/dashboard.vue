@@ -29,6 +29,13 @@ cargarInformacionValores();
 </script>
 
 <template>
+	
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
+				<p class="text-center" style="width: 100%">DASHBOARD</p>
+			</div>
+		</nav>
+
 	<div style="width: 100%" :key="activosTotales" v-if="activosTotales.length == 0">
 		<h3 style="width: 100%; text-align: center;">Cargando...</h3>
 	</div>

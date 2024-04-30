@@ -116,7 +116,7 @@ cargarInformacionValores();
 					<th>Modelo</th>
 					<th>Serial</th>
 					<th>Tipo</th>
-					<th>Ubicacion</th>
+					<th>Ubicación</th>
 					<th>Asignado A</th>
 					<th>Estado</th>
 					<th>Seleccionar</th>

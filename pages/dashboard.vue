@@ -36,7 +36,7 @@ cargarInformacionValores();
 		<br />
 
 		<div style="display: grid; grid-template-columns: 40% 60%">
-			<div style="height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 2%"><h3>Equipos por Ubicación</h3></div>
+			<div style="height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 2%"><h3>Equipos por ubicación</h3></div>
 			<ubicacionEquipos :activosTotales="activosTotales" />
 		</div>
 
@@ -49,7 +49,7 @@ cargarInformacionValores();
 				<UsoMarca :activosTotales="activosTotales" />
 			</div>
 			<div style="height: 100%; display: flex; align-items: center; justify-content: flex-start">
-				<h3>Marcas Usadas en las Instalaciones</h3>
+				<h3>Marcas usadas en las instalaciones </h3>
 			</div>
 		</div>
 
@@ -58,7 +58,7 @@ cargarInformacionValores();
 		<br />
 
 		<div style="display: grid; grid-template-columns: 40% 60%">
-			<div style="height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 2%"><h3>Distribución de Tipo</h3></div>
+			<div style="height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 2%"><h3>Distribución de tipo </h3></div>
 			<TipoEquipo :activosTotales="activosTotales" />
 		</div>
 	</div>

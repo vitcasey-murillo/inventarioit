@@ -39,8 +39,21 @@ function cargarDataUbicaciones() {
 		}
 	}
 
-	dataUbicacion.value.labels = ub;
-	dataUbicacion.value.datasets[0].data = val;
+	let arrElementos = [];
+
+	ub.forEach((x, i) => {
+		arrElementos.push({
+			tipo: x,
+			valor: val[i],
+		});
+	});
+
+
+	arrElementos = arrElementos.sort((a, b) => a.valor - b.valor);
+
+
+	dataUbicacion.value.labels = arrElementos.map((x) => x.tipo);
+	dataUbicacion.value.datasets[0].data = arrElementos.map((x) => x.valor);
 
 	indicadorUbicacion.value = Math.random();
 }

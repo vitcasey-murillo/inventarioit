@@ -5,6 +5,9 @@ definePageMeta({
 
 const client = useSupabaseClient();
 
+const dominioUniversitario = "@unitec.edu.hn";
+
+
 const params = new URLSearchParams(location.search);
 const idActivo = parseInt("" + params.get("idActivo"));
 
@@ -44,6 +47,7 @@ cargarDataParametros();
 async function cargarDataActivo() {
 	const { data } = await client.from("activo").select("*").match({ id: idActivo });
 	modificarActivo.value = data[0];
+	modificarActivo.value.asignado = modificarActivo.value.asignado.replace(dominioUniversitario, "");
 }
 
 cargarDataActivo();
@@ -91,16 +95,10 @@ async function ActualizarActivo(e) {
 		return;
 	}
 
-	if (modificarActivo.value.asignado.length <= "@unitec.edu".length) {
-		alert("El campo 'correo' no es valido porque parece corto!");
-		return;
-	}
-
-	if (!modificarActivo.value.asignado.includes("@unitec.edu") && !modificarActivo.value.asignado.includes("@unitec.edu.hn")) {
-		alert("El campo 'correo' no es valido porque no contiene un correo institucional!");
-		return;
-	}
-
+	modificarActivo.value.asignado += dominioUniversitario;
+	
+	console.log("modificarActivo", modificarActivo.value)
+	
 	const { error } = await client.from("activo").update(modificarActivo.value).match({ id: modificarActivo.value.id });
 	if (error == null) {
 		setTimeout(() => {
@@ -189,7 +187,10 @@ async function ActualizarActivo(e) {
 				<fieldset>
 					<label for="" class="col-11">
 						<span>Asignado A:</span><br />
-						<input type="email" autocomplete="off" name="asignado" class="form-control" v-model="modificarActivo.asignado" placeholder="Nombre Persona" required />
+						<div style="display: flex; justify-content: center;">
+							<input type="email" autocomplete="off" name="asignado" class="form-control" v-model="modificarActivo.asignado" placeholder="usuario.correo" required />
+							<span class="input-group-text" id="emailDomain">{{ dominioUniversitario }}</span>
+						</div>
 					</label>
 				</fieldset>
 				<br />

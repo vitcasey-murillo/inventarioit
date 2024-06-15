@@ -62,11 +62,20 @@ function cargarDataUbicaciones() {
 	let val = [];
 
 	for (let activo of props.activosTotales) {
-		let index = mrc.indexOf(activo.marca);
+		let index = mrc.indexOf(activo.estado);
 
 		if (index == -1) {
-			mrc.push(activo.marca);
-			col.push(generarColor());
+			mrc.push(activo.estado);
+			
+			let buscarColor = "";
+			
+			do{
+				buscarColor = generarColor();
+			} while(col.includes(buscarColor));
+			
+			col.push(buscarColor);
+
+
 			val.push(1);
 		} else {
 			val[index]++;

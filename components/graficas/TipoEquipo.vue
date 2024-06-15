@@ -10,7 +10,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const dataUbicacion = ref({
 	labels: [],
-	datasets: [{ label: "Tipo Equipo", backgroundColor: "#CD97F9", data: [] }],
+	datasets: [{ label: "Tipo Equipo", backgroundColor: "#95B6A6", data: [] }],
 });
 
 const options = ref({

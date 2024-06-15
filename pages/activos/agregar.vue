@@ -5,6 +5,8 @@ definePageMeta({
 
 const client = useSupabaseClient();
 
+const dominioUniversitario = "@unitec.edu.hn";
+
 let objetoActivo = {
 	marca: "",
 	modelo: "",
@@ -70,15 +72,10 @@ async function InsertarActivo(e) {
 		return;
 	}
 
-	if (objetoActivo.asignado.length <= "@unitec.edu".length) {
-		alert("El campo 'correo' no es valido porque parece corto!");
-		return;
-	}
+	objetoActivo.asignado += dominioUniversitario;
+	
+	console.log("objetoActivo", objetoActivo)
 
-	if (!objetoActivo.asignado.includes("@unitec.edu") && !objetoActivo.asignado.includes("@unitec.edu.hn")) {
-		alert("El campo 'correo' no es valido porque no contiene un correo institucional!");
-		return;
-	}
 
 	const { error } = await client.from("activo").insert(objetoActivo);
 	if (error == null) {
@@ -88,6 +85,7 @@ async function InsertarActivo(e) {
 		}, 0);
 		//cargarInformacionValores();
 	} else alert(error.message);
+	 
 }
 </script>
 <template>
@@ -168,13 +166,19 @@ async function InsertarActivo(e) {
 				<fieldset>
 					<label for="" class="col-11">
 						<span>Asignado A:</span><br />
-						<input type="email" autocomplete="off" name="asignado" class="form-control" v-model="objetoActivo.asignado" placeholder="Nombre Persona" required />
+						<div style="display: flex; justify-content: center;">
+							<input type="email" autocomplete="off" name="asignado" class="form-control" v-model="objetoActivo.asignado" placeholder="usuario.correo" required />
+							<span class="input-group-text" id="emailDomain">{{ dominioUniversitario }}</span>
+						</div>
 					</label>
 				</fieldset>
 				<br />
 				<div class="col-11" style="flex: 1; display: flex; align-items: flex-end; justify-content: flex-end; column-gap: 10px">
 					<button role="button" class="btn btn-success" data-bs-dismiss="modal" @click="InsertarActivo">Guardar</button>
 				</div>
+
+
+
 			</div>
 		</form>
 	</div>

@@ -126,7 +126,8 @@ cargarInformacionValores();
 					<div>
 						<ul v-if="dataTotal.length > 0" v-for="elemento of info.filter((x) => x.tipo == 'Estado')" class="list-unstyled">
 							<li :key="elemento.id">
-								<i class="bi bi-x-circle hover-bg" style="margin-right: 10px" @click="eliminarData(elemento.id)"></i>
+								<i v-if="!['Nuevo', 'Descarte'].includes(elemento.valor)" class="bi bi-x-circle hover-bg" style="margin-right: 10px" @click="eliminarData(elemento.id)" ></i>
+								<i v-if="['Nuevo', 'Descarte'].includes(elemento.valor)" style="margin-right: 25px;"></i>
 								<span>{{ elemento.valor }}</span>
 							</li>
 						</ul>

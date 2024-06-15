@@ -30,7 +30,7 @@ async function signIn() {
 			navigateTo("/");
 		}
 	} catch (error) {
-		alert("Error: " + error.message);
+		mandarMensaje(0, error.message);
 	}
 }
 
@@ -43,16 +43,39 @@ async function resetPass() {
 		if (error) {
 			throw error;
 		} else {
-			alert("Correo enviado!");
+			mandarMensaje(1, "Correo enviado!");
 		}
 	} catch (error) {
-		alert("Error: " + error.message);
+		mandarMensaje(0, error.message);
 	}
 }
+
+const mensajes = ref([]);
+
+
+const mandarMensaje = (tipo, mensaje)=> {
+	const objeto = {tipo, mensaje};
+
+	mensajes.value.push(objeto);
+
+	setTimeout(()=>{
+		const idx = mensajes.value.indexOf(objeto.mensaje);
+		mensajes.value.splice(idx, 1);
+	}, 3000)
+}
+
 </script>
 
+
 <template>
+	<div style="width: 100%; position: absolute; z-index: 10;">
+		<template v-for="msj of mensajes">
+			<span :class="msj.tipo == 1 ? 'alert alert-success' : 'alert alert-danger'" style="display:inline-block; width:100%; text-align: center;">{{ msj.mensaje }}</span>
+		</template>
+	</div>
+
 	<section style="height: 100vh; display: flex; align-items: center; justify-content: center">
+		
 		<form class="col-8">
 			<h3 v-if="accionRealizarLogin" style="text-align: center; width: 100%">Iniciar Sesión</h3>
 			<h3 v-else style="text-align: center; width: 100%">Solicitar Cambio de Contraseña</h3>

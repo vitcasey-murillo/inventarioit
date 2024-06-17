@@ -54,6 +54,24 @@ function brindarClase(solicitante){
 }
 
 
+onMounted(()=> {
+	
+	window.addEventListener("resize", ()=>{
+		console.log("resize")
+		const width = window.innerWidth;
+
+		if(width < 1200)
+		{
+			panelColapsado.value = true;
+		}else if(width >= 1200){
+			panelColapsado.value = false;
+		}
+
+	})
+
+})
+
+const panelColapsado = ref(false);
 
 </script>
 
@@ -74,11 +92,11 @@ function brindarClase(solicitante){
 		<Link href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.css" rel="stylesheet" type="text/css" />
 	</Head>
 
-	<div style="display: grid; grid-template-columns: 15% 85%">
+	<div style="display: grid; grid-template-columns: 15% 85%" :class="panelColapsado ? 'panel-colapsado' : '' ">
 
-		<div class="d-flex flex-column flex-shrink-0 p-3 bg-tema" style="width: 280px; height: 100vh;">
+		<div class="d-flex flex-column flex-shrink-0 p-3 bg-tema" style="height: 100vh;">
 			<a href="/" class="link-dark text-decoration-none" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
-				<span class="fs-4 txt-color" style="font-weight: bold">Inventario IT</span>
+				<span class="fs-4 txt-color" style="font-weight: bold; display: block !important">{{ !panelColapsado ? 'Inventario ' : '' }}IT</span>
 				<img src="/banner.png" class="banner" style="width: 50%;" />
 				</a>
 			<hr>
@@ -86,39 +104,42 @@ function brindarClase(solicitante){
 			<li class="nav-item">
 				<NuxtLink to="/activos" :class="brindarClase('/activos')" aria-current="page">
 					<i class="bi bi-box-fill"></i>
-				Activos
+				<span>Activos</span>
 				</NuxtLink>
 			</li>
 			<li>
 				<NuxtLink to="/mantenimiento" :class="brindarClase('/mantenimiento')">
 					<i class="bi bi-tools"></i>
-				Mantenimiento
+				<span>Mantenimiento</span>
 				</NuxtLink>
 			</li>
 			<li>
 				<NuxtLink to="/historial" :class="brindarClase('/historial')">
 					<i class="bi bi-calendar-week-fill"></i>
-				Historial
+				<span>Historial</span>
 				</NuxtLink>
 			</li>
 			<li>
 				<NuxtLink to="/dashboard" :class="brindarClase('/dashboard')">
 					<i class="bi bi-bar-chart-fill"></i>
-				Metricas
+				<span>Metricas</span>
 				</NuxtLink>
 			</li>
 			<li>
 				<NuxtLink to="/data" :class="brindarClase('/data')">
 					<i class="bi bi-bookmark-check-fill"></i>
-				Data
+				<span>Data</span>
 				</NuxtLink>
 			</li>
 			</ul>
+			<div style="height: 100%;" @dblclick="panelColapsado = !panelColapsado">
+
+			</div>
 			<hr>
 			<div class="dropdown">
 				<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle txt-color" data-bs-toggle="dropdown" aria-expanded="false">
 					<i class="bi bi-gear-fill"></i> 
-					<strong style="padding-left: 5px;">{{ user.email }}</strong>
+					<strong class="email-usuario" style="padding-left: 5px;">{{ user.email.includes("@unitec.edu.hn") ? (user.email).replace("@unitec.edu.hn", "") : (user.email).replace("@unitec.edu","") }}</strong>
 				</a>
 				<ul class="dropdown-menu text-small shadow bg-tema" style="">
 					<li><TemaColor /></li>
@@ -170,5 +191,28 @@ body, body.dark-mode .bg-sub-tema{
 }
 
 
+.nav-link span{
+	padding-left: 5px;
+}
+
+.panel-colapsado {
+	grid-template-columns: 5% 95% !important;
+}
+
+.panel-colapsado .banner{
+	display: none;
+}
+
+.panel-colapsado i{
+	font-size: 2.5rem;
+}
+
+.panel-colapsado span{
+	display: none;
+}
+
+.panel-colapsado .email-usuario{
+	display: none;
+}
 
 </style>

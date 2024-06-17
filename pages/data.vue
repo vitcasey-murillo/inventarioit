@@ -24,7 +24,7 @@ async function cargarInformacionValores() {
 
 async function insertarEnData(valorSelect, valorInput) {
 	if (valorInput == "") {
-		alert("El campo de texto no puede estar vacio");
+		await controlModal("El campo de texto no puede estar vacio");
 		return;
 	}
 
@@ -36,7 +36,7 @@ async function insertarEnData(valorSelect, valorInput) {
 	const { error } = await client.from("data").insert(objeto);
 	if (error == null) {
 		cargarInformacionValores();
-	} else alert(error.message);
+	} else await controlModal(error.message);
 
 	valorInput_Marca.value = "";
 	valorInput_Tipo.value = "";
@@ -45,7 +45,8 @@ async function insertarEnData(valorSelect, valorInput) {
 }
 
 async function eliminarData(id) {
-	let confirmar = confirm("¿Está seguro que desea borrar el registro? \n\nEliminar un dato conlleva en que los activos que lo poseean se les limpiará ese valor.");
+	console.log("intenta eliminar id", id)
+	let confirmar = await controlModalConfirmar("¿Está seguro que desea borrar el registro? \n\nEliminar un dato conlleva en que los activos que lo poseean se les quitará ese valor.");
 
 	if (confirmar) {
 		const { error } = await client.from("data").delete().eq("id", id);
@@ -53,27 +54,107 @@ async function eliminarData(id) {
 	}
 }
 
-async function filtrarValores() {
-	info.value = dataTotal.value.filter((x) => x.tipo == valorSelect);
-}
 
 cargarInformacionValores();
+
+
+const visualizarPanel = ref("");
+
+function obtenerClase(enlace){
+	if(enlace == visualizarPanel.value)	return "nav-link active";
+	
+	return "nav-link";
+}
+
+function cambiarPanel(enlace){
+	visualizarPanel.value = enlace;
+}
+
+// CONTROL MODALES
+
+async function controlModal(mensaje, tipo = "danger"){
+	return new Promise((resolve)=>{
+
+		controlAlert.value.accion = ()=>{
+			controlAlert.value.visulizar = false;	
+			resolve();		
+		};
+
+		controlAlert.value.tipo = tipo;
+		controlAlert.value.mensaje = mensaje;
+		controlAlert.value.visulizar = true;
+	});
+}
+
+async function controlModalConfirmar(mensaje){
+	return new Promise((resolve)=>{
+
+		controlConfirm.value.accion = (respuesta)=>{
+			controlConfirm.value.visulizar = false;	
+			resolve(respuesta);		
+		};
+
+		controlConfirm.value.mensaje = mensaje;
+		controlConfirm.value.visulizar = true;
+	});
+}
+
+
+const controlAlert = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Data",
+	mensaje: "",
+	accion: ()=>{}
+});
+
+const controlConfirm = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Confirmar",
+	mensaje: "",
+	accion: ()=>{}
+});
+
 </script>
 <template>
-	<div style="width: 100%">
+	<ModalAlert :tipo="controlAlert.tipo" :titulo="controlAlert.titulo" :mensaje="controlAlert.mensaje" :accion="controlAlert.accion" v-if="controlAlert.visulizar"/>
+	<ModalConfirm :titulo="controlConfirm.titulo" :mensaje="controlConfirm.mensaje" :accion="controlConfirm.accion" v-if="controlConfirm.visulizar"/>
+
+
+	<div style="width: 100%" class="bg-sub-tema">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container-fluid">
 				<p class="text-center" style="width: 100%">DATA</p>
 			</div>
 		</nav>
 
-		<div class="container" style="padding: 50px">
-			<!-- " -->
-			<i style="font-size: 0.9em; color: red">*Eliminar un dato conlleva en que los activos que lo poseean se les limpiará ese valor y no es reversible.</i>
-			<br />
-			<br />
+		
+		<i style="font-size: 0.9em; color: red">*Eliminar un dato conlleva en que los activos que lo poseean se les quitará ese valor y no es reversible.</i>
+		<br />
+
+		<div class="container" style="width: 100%; margin: 0;">
+
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a :class="obtenerClase('marca')" href="#" @click="cambiarPanel('marca')">Gestionar: Marca</a>
+				</li>
+				<li class="nav-item">
+					<a :class="obtenerClase('tipo')" href="#" @click="cambiarPanel('tipo')">Gestionar: Tipo</a>
+				</li>
+				<li class="nav-item">
+					<a :class="obtenerClase('estado')" href="#" @click="cambiarPanel('estado')">Gestionar: Estado</a>
+				</li>
+				<li class="nav-item">
+					<a :class="obtenerClase('ubicacion')" href="#" @click="cambiarPanel('ubicacion')">Gestionar: Ubicación</a>
+				</li>
+			</ul>
+
+					
 			<article>
-				<div>
+
+				<div v-if="visualizarPanel=='marca'">
+
 					<h4 style="width: 100%; text-align: center">Marca</h4>
 					<br />
 					<div style="display: grid; grid-template-columns: 70% 30%; column-gap: 10px">
@@ -94,7 +175,7 @@ cargarInformacionValores();
 					</div>
 				</div>
 
-				<div>
+				<div v-if="visualizarPanel=='tipo'">
 					<h4 style="width: 100%; text-align: center">Tipo</h4>
 					<br />
 					<div style="display: grid; grid-template-columns: 70% 30%; column-gap: 10px">
@@ -115,7 +196,7 @@ cargarInformacionValores();
 					</div>
 				</div>
 
-				<div>
+				<div v-if="visualizarPanel=='estado'">
 					<h4 style="width: 100%; text-align: center">Estado</h4>
 					<br />
 					<div style="display: grid; grid-template-columns: 70% 30%; column-gap: 10px">
@@ -137,7 +218,7 @@ cargarInformacionValores();
 					</div>
 				</div>
 
-				<div>
+				<div v-if="visualizarPanel=='ubicacion'">
 					<h4 style="width: 100%; text-align: center">Ubicación</h4>
 					<br />
 					<div style="display: grid; grid-template-columns: 70% 30%; column-gap: 10px">
@@ -157,7 +238,6 @@ cargarInformacionValores();
 						</ul>
 					</div>
 				</div>
-				<div style="flex-grow: 1; flex-shrink: 0; padding: 0px 30%"></div>
 			</article>
 		</div>
 
@@ -177,17 +257,31 @@ cargarInformacionValores();
 article {
 	width: 100%;
 	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
-	justify-content: flex-start;
-	flex-wrap: wrap;
-	gap: 15px;
+	align-items: center;
+	justify-content: center;
+
+	padding-top: 20px;
 }
 
 article > div {
-	flex-grow: 1;
-	flex-shrink: 0;
+	
+	min-width: 400px; 
 	padding: 20px;
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+.nav-link {
+	color: #6e707e;
+	background-color: unset !important;
+}
+
+.nav-link.active {
+	color: black !important;
+	border-bottom: 1px solid black !important;
+}
+
+.espacio-tab{
+	width: 100%;
 }
 </style>

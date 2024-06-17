@@ -1,7 +1,11 @@
 <script setup>
+import { useRoute } from 'vue-router';
+
 definePageMeta({
 	middleware: "auth",
 });
+
+const route = useRoute();
 
 const user = useSupabaseUser();
 const client = useSupabaseClient();
@@ -37,6 +41,20 @@ async function rutaCambiarContra() {
 		}
 	}
 }
+
+
+function brindarClase(solicitante){
+	const ruta = route.path;
+
+	if(ruta.includes(solicitante))
+	{
+		return "nav-link txt-color active";
+	}
+	return "nav-link txt-color link-dark";
+}
+
+
+
 </script>
 
 <template>
@@ -55,133 +73,102 @@ async function rutaCambiarContra() {
 
 		<Link href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.css" rel="stylesheet" type="text/css" />
 	</Head>
+
 	<div style="display: grid; grid-template-columns: 15% 85%">
-		<!-- Sidebar / Navigation -->
 
-		<div class="col-auto sidebar">
-			<div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-				<h4 style="width: 100%; text-align: center">
-					INVENTARIO <br />
-					DE IT
-				</h4>
-
-				<br style="margin: 50px 0px" />
-				<ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu" style="flex-grow: 1">
-					<li class="nav-item">
-						<NuxtLink to="/activos" class="nav-link"> Activos </NuxtLink>
-					</li>
-					<li>
-						<NuxtLink to="/mantenimiento" class="nav-link"> Mantenimiento </NuxtLink>
-					</li>
-					<li>
-						<NuxtLink to="/historial" class="nav-link"> Historial <br />
-							mantenimiento </NuxtLink>
-					</li>
-					<li>
-						<NuxtLink to="/dashboard" class="nav-link"> Dashboard </NuxtLink>
-					</li>
-					<li>
-						<NuxtLink to="/data" class="nav-link"> Data </NuxtLink>
-					</li>
-					<!-- Add more navigation items here -->
-					<div class="contenedor-cerrar">
-						<details>
-							<summary style="font-size: 0.8rem">{{ user.email }}</summary>
-							<br />
-							<span class="contenedor-cerrar_boton-cambiar" @click="rutaCambiarContra">Cambiar Contraseña</span>
-							<br />
-							<span class="contenedor-cerrar_boton-cerrar" @click="cerrarSesion">Cerrar Sesión</span>
-							<br />
-						</details>
-					</div>
+		<div class="d-flex flex-column flex-shrink-0 p-3 bg-tema" style="width: 280px; height: 100vh;">
+			<a href="/" class="link-dark text-decoration-none" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
+				<span class="fs-4 txt-color" style="font-weight: bold">Inventario IT</span>
+				<img src="/banner.png" class="banner" style="width: 50%;" />
+				</a>
+			<hr>
+			<ul class="nav nav-pills flex-column mb-auto" style="flex: 1;">
+			<li class="nav-item">
+				<NuxtLink to="/activos" :class="brindarClase('/activos')" aria-current="page">
+					<i class="bi bi-box-fill"></i>
+				Activos
+				</NuxtLink>
+			</li>
+			<li>
+				<NuxtLink to="/mantenimiento" :class="brindarClase('/mantenimiento')">
+					<i class="bi bi-tools"></i>
+				Mantenimiento
+				</NuxtLink>
+			</li>
+			<li>
+				<NuxtLink to="/historial" :class="brindarClase('/historial')">
+					<i class="bi bi-calendar-week-fill"></i>
+				Historial
+				</NuxtLink>
+			</li>
+			<li>
+				<NuxtLink to="/dashboard" :class="brindarClase('/dashboard')">
+					<i class="bi bi-bar-chart-fill"></i>
+				Metricas
+				</NuxtLink>
+			</li>
+			<li>
+				<NuxtLink to="/data" :class="brindarClase('/data')">
+					<i class="bi bi-bookmark-check-fill"></i>
+				Data
+				</NuxtLink>
+			</li>
+			</ul>
+			<hr>
+			<div class="dropdown">
+				<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle txt-color" data-bs-toggle="dropdown" aria-expanded="false">
+					<i class="bi bi-gear-fill"></i> 
+					<strong style="padding-left: 5px;">{{ user.email }}</strong>
+				</a>
+				<ul class="dropdown-menu text-small shadow bg-tema" style="">
+					<li><TemaColor /></li>
+					<li><a class="dropdown-item txt-color" href="#" @click="rutaCambiarContra">Cambiar Contraseña</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item txt-color" href="#" @click="cerrarSesion">Cerrar Sesión</a></li>
 				</ul>
 			</div>
 		</div>
 
 		<slot />
-	</div>
+	</div>	
 </template>
 
 <style>
-.contenedor-cerrar {
-	bottom: 0;
-	position: fixed;
-	flex-grow: 1;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: flex-end;
+
+
+body .bg-tema{
+	background-color: #F8F9FA;	
 }
 
-.contenedor-cerrar details {
-	height: 18vh;
-	text-align: center;
-	position: sticky;
-}
-.contenedor-cerrar details summary {
-	list-style: none;
+
+body.dark-mode .bg-tema{
+	background-color: #333 !important;
 }
 
-.contenedor-cerrar_boton-cambiar,
-.contenedor-cerrar_boton-cerrar {
-	font-style: italic;
-	width: 100%;
+body .txt-color{
+	color: #222 !important;
 }
 
-.contenedor-cerrar_boton-cambiar:hover {
-	color: yellow !important;
-	cursor: pointer;
+body.dark-mode .txt-color{
+	color: #fff !important;
 }
 
-.contenedor-cerrar_boton-cerrar:hover {
-	color: red !important;
-	cursor: pointer;
+
+body.dark-mode .banner{
+	background-color: #eee;
 }
 
-body {
-	background-color: #f8f9fa;
-}
-.sidebar {
-	background-color: #20315c;
-	color: white;
-}
-.sidebar ul {
-	padding-left: 0;
-	list-style: none;
+
+
+body .bg-sub-tema{
+	background-color: unset;	
 }
 
-.sidebar ul li a {
-	color: white;
-	text-decoration: none;
+
+body, body.dark-mode .bg-sub-tema{
+	background-color: #eeea !important;
 }
-.profile-header-container {
-	text-align: center;
-	background-color: #ff6f61;
-	color: white;
-	padding: 20px;
-}
-.profile-header-img {
-	padding: 54px;
-	position: relative;
-	top: -22px;
-	margin-bottom: -22px;
-}
-.profile-header-img img.img-circle {
-	width: 100px;
-	height: 100px;
-	border: 2px solid white;
-	border-radius: 50%;
-}
-.profile-header-info h1 {
-	font-size: 24px;
-	margin-bottom: 0;
-}
-.profile-header-info h2 {
-	font-size: 12px;
-	margin: 0;
-}
-.profile-header-info p {
-	font-size: 14px;
-	margin-top: 15px;
-}
+
+
+
 </style>

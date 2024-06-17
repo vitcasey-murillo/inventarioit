@@ -55,43 +55,43 @@ cargarDataActivo();
 async function EliminarActivo(e) {
 	e.preventDefault();
 
-	if (!confirm("Está seguro que desea eliminar este registro?")) {
+	if (!await controlModalConfirmar("Está seguro que desea eliminar este Activo?")) {
 		return;
 	}
 	const { error } = await client.from("activo").delete().match({ id: idActivo });
 	if (error == null) {
-		setTimeout(() => {
-			alert("Registro Eliminado!");
+		setTimeout(async() => {
+			await controlModal("Activo Eliminado!", "success");
 			navigateTo("/activos");
 		}, 0);
-	} else alert(error.message);
+	} else await controlModal(error.message);
 }
 
 async function ActualizarActivo(e) {
 	e.preventDefault();
 
 	if (modificarActivo.value.marca.length == 0) {
-		alert("El campo 'marca' no es valido!");
+		await controlModal("El campo 'marca' no es valido!");
 		return;
 	}
 
 	if (modificarActivo.value.modelo.length == 0) {
-		alert("El campo 'modelo' no es valido!");
+		await controlModal("El campo 'modelo' no es valido!");
 		return;
 	}
 
 	if (modificarActivo.value.tipo.length == 0) {
-		alert("El campo 'tipo' no es valido!");
+		await controlModal("El campo 'tipo' no es valido!");
 		return;
 	}
 
 	if (modificarActivo.value.ubicacion.length == 0) {
-		alert("El campo 'ubicacion' no es valido!");
+		await controlModal("El campo 'ubicacion' no es valido!");
 		return;
 	}
 
 	if (modificarActivo.value.estado.length == 0) {
-		alert("El campo 'estado' no es valido!");
+		await controlModal("El campo 'estado' no es valido!");
 		return;
 	}
 
@@ -101,15 +101,67 @@ async function ActualizarActivo(e) {
 	
 	const { error } = await client.from("activo").update(modificarActivo.value).match({ id: modificarActivo.value.id });
 	if (error == null) {
-		setTimeout(() => {
-			alert("Activo Actualizado!");
+		setTimeout(async() => {
+			await controlModal("Activo Actualizado!", "success");
 			navigateTo("/activos");
 		}, 0);
-	} else alert(error.message);
+	} else await controlModal(error.message);
 }
+
+
+// CONTROL MODALES
+
+async function controlModal(mensaje, tipo = "danger"){
+	return new Promise((resolve)=>{
+
+		controlAlert.value.accion = ()=>{
+			controlAlert.value.visulizar = false;	
+			resolve();		
+		};
+
+		controlAlert.value.tipo = tipo;
+		controlAlert.value.mensaje = mensaje;
+		controlAlert.value.visulizar = true;
+	});
+}
+
+async function controlModalConfirmar(mensaje){
+	return new Promise((resolve)=>{
+
+		controlConfirm.value.accion = (respuesta)=>{
+			controlConfirm.value.visulizar = false;	
+			resolve(respuesta);		
+		};
+
+		controlConfirm.value.mensaje = mensaje;
+		controlConfirm.value.visulizar = true;
+	});
+}
+
+
+const controlAlert = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Modificar",
+	mensaje: "",
+	accion: ()=>{}
+});
+
+const controlConfirm = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Confirmar",
+	mensaje: "",
+	accion: ()=>{}
+});
+
 </script>
 <template>
-	<div style="width: 100%; padding: 5px">
+
+<ModalAlert :tipo="controlAlert.tipo" :titulo="controlAlert.titulo" :mensaje="controlAlert.mensaje" :accion="controlAlert.accion" v-if="controlAlert.visulizar"/>
+<ModalConfirm :titulo="controlConfirm.titulo" :mensaje="controlConfirm.mensaje" :accion="controlConfirm.accion" v-if="controlConfirm.visulizar"/>
+	
+<div style="width: 100%; padding: 5px" class="bg-sub-tema">
 		<br />
 		<h3 style="width: 100%; text-align: center">MODIFICAR ACTIVO</h3>
 
@@ -188,7 +240,7 @@ async function ActualizarActivo(e) {
 					<label for="" class="col-11">
 						<span>Asignado A:</span><br />
 						<div style="display: flex; justify-content: center;">
-							<input type="email" autocomplete="off" name="asignado" class="form-control" v-model="modificarActivo.asignado" placeholder="usuario.correo" required />
+							<input type="text" autocomplete="off" name="asignado" class="form-control" v-model="modificarActivo.asignado" placeholder="usuario.correo" required />
 							<span class="input-group-text" id="emailDomain">{{ dominioUniversitario }}</span>
 						</div>
 					</label>
@@ -200,82 +252,7 @@ async function ActualizarActivo(e) {
 				</div>
 			</div>
 		</form>
-		<!--
-			<form action="" class="formulario">
-			<div class="modal-body">
-				<fieldset>
-					<label for="" class="col-3">
-						<span>marca:</span><br />
-						<select name="marca" id="" class="form-control" v-model="modificarActivo.marca">
-							<template v-for="marca of arrMarca">
-								<option :value="marca">{{ marca }}</option>
-							</template>
-						</select>
-					</label>
-					<label for="" class="col-4">
-						<span>modelo:</span><br />
-						<input type="text" autocomplete="off" name="modelo" class="form-control" v-model="modificarActivo.modelo" placeholder="Optiplex..." />
-					</label>
-					<label for="" class="col-4">
-						<span>serial:</span><br />
-						<input type="text" autocomplete="off" name="serial" class="form-control" v-model="modificarActivo.serial" placeholder="S/N " />
-					</label>
-				</fieldset>
-				<fieldset>
-					<label for="" class="col-3">
-						<span>tipo:</span><br />
-						<select name="tipo" id="" class="form-control" v-model="modificarActivo.tipo">
-							<template v-for="tipo of arrTipo">
-								<option :value="tipo">{{ tipo }}</option>
-							</template>
-						</select>
-					</label>
-					<label for="" class="col-3">
-						<span>Disco Duro:</span><br />
-						<input type="text" autocomplete="off" name="discoDuro" class="form-control" v-model="modificarActivo.discoDuro" placeholder="256GB SSD" />
-					</label>
-					<label for="" class="col-2">
-						<span>ram:</span><br />
-						<input type="text" autocomplete="off" name="ram" class="form-control" v-model="modificarActivo.ram" placeholder="8GB" />
-					</label>
-					<label for="" class="col-3">
-						<span>procesador:</span><br />
-						<input type="text" autocomplete="off" name="procesador" class="form-control" v-model="modificarActivo.procesador" placeholder="i5 8va" />
-					</label>
-				</fieldset>
-				<fieldset>
-					<label class="col-1"></label>
-					<label for="" class="col-5">
-						<span>Ubicación:</span><br />
-						<select name="ubicacion" id="" class="form-control" v-model="modificarActivo.ubicacion">
-							<template v-for="ubicacion of arrUbicacion">
-								<option :value="ubicacion">{{ ubicacion }}</option>
-							</template>
-						</select>
-					</label>
-					<label for="" class="col-4">
-						<span>Estado:</span><br />
-						<select name="estado" id="" class="form-control" v-model="modificarActivo.estado">
-							<template v-for="estado of arrEstado">
-								<option :value="estado">{{ estado }}</option>
-							</template>
-						</select>
-					</label>
-				</fieldset>
-				<fieldset>
-					<label class="col-1"></label>
-					<label for="" class="col-9">
-						<span>asignado A:</span><br />
-						<input type="text" autocomplete="off" name="asignado" class="form-control" v-model="modificarActivo.asignado" placeholder="Nombre Persona" />
-					</label>
-				</fieldset>
-			</div>
-			<div class="modal-footer d-flex justify-content-around">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				
-			</div>
-		</form>
-		--></div>
+	</div>
 </template>
 
 <style scoped>

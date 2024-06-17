@@ -21,7 +21,7 @@ async function signUp() {
 }
 </script>
 <template>
-	<section style="height: 100vh; display: flex; align-items: center; justify-content: center">
+	<section style="height: 100vh; display: flex; align-items: center; justify-content: center" class="bg-sub-tema">
 		<form class="col-8">
 			<h3 style="text-align: center; width: 100%">Iniciar Sesión</h3>
 			<br />

@@ -27,7 +27,7 @@ function seleccionar(id) {
 }
 
 async function eliminar(id) {
-	if (!confirm("¿Está seguro que desea eliminar este registro?")) {
+	if (!await controlModalConfirmar("¿Está seguro que desea eliminar este registro?")) {
 		return;
 	}
 
@@ -48,18 +48,71 @@ async function eliminar(id) {
 
 	const { error } = await client.from("mantenimiento").delete().match({ id });
 	if (error == null) {
-		setTimeout(() => {
-			alert("Registro Eliminado!");
+		setTimeout(async () => {
+			await controlModal("Registro Eliminado!", "success");
 			cargarInformacionValores();
 		}, 0);
-	} else alert(error.message);
+	} else await controlModal(error.message);
 }
 
 cargarInformacionValores();
-</script>
 
+
+
+
+// CONTROL MODALES
+
+async function controlModal(mensaje, tipo = "danger"){
+	return new Promise((resolve)=>{
+
+		controlAlert.value.accion = ()=>{
+			controlAlert.value.visulizar = false;	
+			resolve();		
+		};
+
+		controlAlert.value.tipo = tipo;
+		controlAlert.value.mensaje = mensaje;
+		controlAlert.value.visulizar = true;
+	});
+}
+
+async function controlModalConfirmar(mensaje){
+	return new Promise((resolve)=>{
+
+		controlConfirm.value.accion = (respuesta)=>{
+			controlConfirm.value.visulizar = false;	
+			resolve(respuesta);		
+		};
+
+		controlConfirm.value.mensaje = mensaje;
+		controlConfirm.value.visulizar = true;
+	});
+}
+
+
+const controlAlert = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Modificar",
+	mensaje: "",
+	accion: ()=>{}
+});
+
+const controlConfirm = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Confirmar",
+	mensaje: "",
+	accion: ()=>{}
+});
+
+</script>
 <template>
-	<div style="width: 100%">
+
+<ModalAlert :tipo="controlAlert.tipo" :titulo="controlAlert.titulo" :mensaje="controlAlert.mensaje" :accion="controlAlert.accion" v-if="controlAlert.visulizar"/>
+<ModalConfirm :titulo="controlConfirm.titulo" :mensaje="controlConfirm.mensaje" :accion="controlConfirm.accion" v-if="controlConfirm.visulizar"/>
+	
+	<div style="width: 100%" class="bg-sub-tema">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container-fluid">
 				<p class="text-center" style="width: 100%">HISTORIAL</p>

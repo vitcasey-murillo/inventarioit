@@ -104,7 +104,7 @@ function mostrarDescartes() {
 cargarInformacionValores();
 </script>
 <template>
-	<div style="width: 100%; padding: 5px">
+	<div style="width: 100%; padding: 5px" class="bg-sub-tema">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container-fluid">
 				<p class="text-center" style="width: 100%">ACTIVOS</p>

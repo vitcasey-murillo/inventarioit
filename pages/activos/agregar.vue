@@ -48,27 +48,27 @@ async function InsertarActivo(e) {
 	e.preventDefault();
 
 	if (objetoActivo.marca.length == 0) {
-		alert("El campo 'marca' no es valido!");
+		await controlModal("El campo 'marca' no es valido!");
 		return;
 	}
 
 	if (objetoActivo.modelo.length == 0) {
-		alert("El campo 'modelo' no es valido!");
+		await controlModal("El campo 'modelo' no es valido!");
 		return;
 	}
 
 	if (objetoActivo.tipo.length == 0) {
-		alert("El campo 'tipo' no es valido!");
+		await controlModal("El campo 'tipo' no es valido!");
 		return;
 	}
 
 	if (objetoActivo.ubicacion.length == 0) {
-		alert("El campo 'ubicacion' no es valido!");
+		await controlModal("El campo 'ubicacion' no es valido!");
 		return;
 	}
 
 	if (objetoActivo.estado.length == 0) {
-		alert("El campo 'estado' no es valido!");
+		await controlModal("El campo 'estado' no es valido!");
 		return;
 	}
 
@@ -79,17 +79,45 @@ async function InsertarActivo(e) {
 
 	const { error } = await client.from("activo").insert(objetoActivo);
 	if (error == null) {
-		setTimeout(() => {
-			alert("Activo Creado!");
+		setTimeout(async() => {
+			await controlModal("Activo Creado!", "success");
 			navigateTo("/activos");
 		}, 0);
 		//cargarInformacionValores();
-	} else alert(error.message);
+	} else await controlModal(error.message);
 	 
 }
+
+
+// CONTROL MODALES
+
+async function controlModal(mensaje, tipo = "danger"){
+	return new Promise((resolve)=>{
+
+		controlAlert.value.accion = ()=>{
+			controlAlert.value.visulizar = false;	
+			resolve();		
+		};
+
+		controlAlert.value.tipo = tipo;
+		controlAlert.value.mensaje = mensaje;
+		controlAlert.value.visulizar = true;
+	});
+}
+
+const controlAlert = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Agregar",
+	mensaje: "",
+	accion: ()=>{}
+});
+
 </script>
 <template>
-	<div style="width: 100%; padding: 5px">
+<ModalAlert :tipo="controlAlert.tipo" :titulo="controlAlert.titulo" :mensaje="controlAlert.mensaje" :accion="controlAlert.accion" v-if="controlAlert.visulizar"/>
+
+	<div style="width: 100%; padding: 5px" class="bg-sub-tema">
 		<br />
 		<h3 style="width: 100%; text-align: center">AGREGAR ACTIVO</h3>
 		<form action="" class="formulario">
@@ -167,7 +195,7 @@ async function InsertarActivo(e) {
 					<label for="" class="col-11">
 						<span>Asignado A:</span><br />
 						<div style="display: flex; justify-content: center;">
-							<input type="email" autocomplete="off" name="asignado" class="form-control" v-model="objetoActivo.asignado" placeholder="usuario.correo" required />
+							<input type="text" autocomplete="off" name="asignado" class="form-control" v-model="objetoActivo.asignado" placeholder="usuario.correo" required />
 							<span class="input-group-text" id="emailDomain">{{ dominioUniversitario }}</span>
 						</div>
 					</label>

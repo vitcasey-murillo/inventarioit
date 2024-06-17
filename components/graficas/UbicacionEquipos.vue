@@ -10,7 +10,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const dataUbicacion = ref({
 	labels: ["January", "February", "March"],
-	datasets: [{ label: "Cant. por Ubicación", backgroundColor: "#CD97F9", data: [40, 20, 12] }],
+	datasets: [{ label: "Cantidad por Ubicación", backgroundColor: "#CD97F9", data: [40, 20, 12] }],
 });
 
 const options = ref({

@@ -50,7 +50,7 @@ async function insertarMantenimiento() {
 	const activosSeleccionados = activos.value.filter((x) => x.seleccionado);
 
 	if (activosSeleccionados.length == 0) {
-		alert("No se ha seleccionado ningún registro.");
+		await controlModal("No se ha seleccionado ningún registro.");
 		return;
 	}
 
@@ -62,17 +62,73 @@ async function insertarMantenimiento() {
 	});
 
 	if (error) {
-		alert("Problemas: " + error);
+		await controlModal("Problemas: " + error);
 	} else {
-		alert("Operación Realizada!");
+		await controlModal("Operación Realizada!", "success");
 		location.reload();
 	}
 }
 
 cargarInformacionValores();
+
+
+
+
+// CONTROL MODALES
+
+async function controlModal(mensaje, tipo = "danger"){
+	return new Promise((resolve)=>{
+
+		controlAlert.value.accion = ()=>{
+			controlAlert.value.visulizar = false;	
+			resolve();		
+		};
+
+		controlAlert.value.tipo = tipo;
+		controlAlert.value.mensaje = mensaje;
+		controlAlert.value.visulizar = true;
+	});
+}
+
+async function controlModalConfirmar(mensaje){
+	return new Promise((resolve)=>{
+
+		controlConfirm.value.accion = (respuesta)=>{
+			controlConfirm.value.visulizar = false;	
+			resolve(respuesta);		
+		};
+
+		controlConfirm.value.mensaje = mensaje;
+		controlConfirm.value.visulizar = true;
+	});
+}
+
+
+const controlAlert = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Mantenimiento",
+	mensaje: "",
+	accion: ()=>{}
+});
+
+const controlConfirm = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Confirmar",
+	mensaje: "",
+	accion: ()=>{}
+});
+
 </script>
 <template>
-	<div style="width: 100%; padding: 5px">
+
+<ModalAlert :tipo="controlAlert.tipo" :titulo="controlAlert.titulo" :mensaje="controlAlert.mensaje" :accion="controlAlert.accion" v-if="controlAlert.visulizar"/>
+<ModalConfirm :titulo="controlConfirm.titulo" :mensaje="controlConfirm.mensaje" :accion="controlConfirm.accion" v-if="controlConfirm.visulizar"/>
+	
+
+
+	<div style="width: 100%; padding: 5px" class="bg-sub-tema">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container-fluid">
 				<p class="text-center" style="width: 100%">CREAR MANTENIMIENTO</p>
@@ -123,7 +179,7 @@ cargarInformacionValores();
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="activo in activos">
+				<tr v-for="activo in activos.slice(0, 15)">
 					<td>{{ activo.marca }}</td>
 					<td>{{ activo.modelo }}</td>
 					<td>{{ activo.serial }}</td>

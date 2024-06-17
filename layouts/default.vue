@@ -86,7 +86,7 @@ const panelColapsado = ref(false);
 			integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 			crossorigin="anonymous"
 		></Script>
-
+		<Link rel="icon" type="image/png" href="/icon.png" />
 		<Link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" />
 
 		<Link href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.css" rel="stylesheet" type="text/css" />
@@ -97,7 +97,7 @@ const panelColapsado = ref(false);
 		<div class="d-flex flex-column flex-shrink-0 p-3 bg-tema" style="height: 100vh;">
 			<a href="/" class="link-dark text-decoration-none" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
 				<span class="fs-4 txt-color" style="font-weight: bold; display: block !important">{{ !panelColapsado ? 'Inventario ' : '' }}IT</span>
-				<img src="/banner.png" class="banner" style="width: 50%;" />
+				<img src="/logo.png" class="banner" style="width: 25%;" />
 				</a>
 			<hr>
 			<ul class="nav nav-pills flex-column mb-auto" style="flex: 1;">
@@ -173,12 +173,6 @@ body .txt-color{
 body.dark-mode .txt-color{
 	color: #fff !important;
 }
-
-
-body.dark-mode .banner{
-	background-color: #eee;
-}
-
 
 
 body .bg-sub-tema{

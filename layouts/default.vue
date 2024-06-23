@@ -92,9 +92,9 @@ const panelColapsado = ref(false);
 		<Link href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.css" rel="stylesheet" type="text/css" />
 	</Head>
 
-	<div style="display: grid; grid-template-columns: 15% 85%" :class="panelColapsado ? 'panel-colapsado' : '' ">
+	<div style="display: grid; grid-template-columns: 15% 85%" :class="panelColapsado ? 'contenedor-global' : '' ">
 
-		<div class="d-flex flex-column flex-shrink-0 p-3 bg-tema" style="height: 100vh;">
+		<div class="d-flex flex-column flex-shrink-0 p-3 bg-tema panel-colapsado" style="height: 100vh;">
 			<a href="/" class="link-dark text-decoration-none" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
 				<span class="fs-4 txt-color" style="font-weight: bold; display: block !important">{{ !panelColapsado ? 'Inventario ' : '' }}IT</span>
 				<img src="/logo.png" class="banner" style="width: 25%;" />
@@ -189,23 +189,24 @@ body, body.dark-mode .bg-sub-tema{
 	padding-left: 5px;
 }
 
-.panel-colapsado {
+.contenedor-global{
 	grid-template-columns: 5% 95% !important;
 }
 
-.panel-colapsado .banner{
+
+.contenedor-global .panel-colapsado .banner{
 	display: none;
 }
 
-.panel-colapsado i{
+.contenedor-global .panel-colapsado i{
 	font-size: 2.5rem;
 }
 
-.panel-colapsado span{
+.contenedor-global .panel-colapsado span{
 	display: none;
 }
 
-.panel-colapsado .email-usuario{
+.contenedor-global .panel-colapsado .email-usuario{
 	display: none;
 }
 

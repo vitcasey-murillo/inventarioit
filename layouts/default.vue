@@ -20,14 +20,14 @@ async function cerrarSesion() {
 			navigateTo("/login");
 		}
 	} catch (ex) {
-		alert("Error: " + ex.message);
+		await controlModal("Error: " + ex.message);
 	}
 }
 
 async function rutaCambiarContra() {
 	let mensaje = `¿Desea solicitar cambio de contraseña para ${user.value.email}?\n\nRecibirá un correo con el enlace.`;
 
-	if (confirm(mensaje)) {
+	if (await controlModalConfirmar(mensaje)) {
 		try {
 			const { data, error } = await client.auth.resetPasswordForEmail(user.value.email, {
 				redirectTo: `${location.origin}/register_newpass`,
@@ -37,7 +37,7 @@ async function rutaCambiarContra() {
 				throw error;
 			}
 		} catch (ex) {
-			alert("Error: " + ex.message);
+			await controlModal("Error: " + ex.message);
 		}
 	}
 }
@@ -72,10 +72,69 @@ onMounted(()=> {
 })
 
 const panelColapsado = ref(false);
+const opcionesUsuario = ref(false);
+
+function quitarOpcionesUsuario(){
+	setTimeout(()=> {
+		opcionesUsuario.value = false
+	},100)
+}
+
+
+
+// CONTROL MODALES
+
+async function controlModal(mensaje, tipo = "danger"){
+	return new Promise((resolve)=>{
+
+		controlAlert.value.accion = ()=>{
+			controlAlert.value.visulizar = false;	
+			resolve();		
+		};
+
+		controlAlert.value.tipo = tipo;
+		controlAlert.value.mensaje = mensaje;
+		controlAlert.value.visulizar = true;
+	});
+}
+
+async function controlModalConfirmar(mensaje){
+	return new Promise((resolve)=>{
+
+		controlConfirm.value.accion = (respuesta)=>{
+			controlConfirm.value.visulizar = false;	
+			resolve(respuesta);		
+		};
+
+		controlConfirm.value.mensaje = mensaje;
+		controlConfirm.value.visulizar = true;
+	});
+}
+
+
+const controlAlert = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Modificar",
+	mensaje: "",
+	accion: ()=>{}
+});
+
+const controlConfirm = ref({
+	visulizar: false,
+	tipo: "danger",
+	titulo: "Confirmar",
+	mensaje: "",
+	accion: ()=>{}
+});
 
 </script>
-
 <template>
+
+<ModalAlert :tipo="controlAlert.tipo" :titulo="controlAlert.titulo" :mensaje="controlAlert.mensaje" :accion="controlAlert.accion" v-if="controlAlert.visulizar"/>
+<ModalConfirm :titulo="controlConfirm.titulo" :mensaje="controlConfirm.mensaje" :accion="controlConfirm.accion" v-if="controlConfirm.visulizar"/>
+	
+
 	<Head>
 		<title>Inventario IT</title>
 
@@ -137,11 +196,11 @@ const panelColapsado = ref(false);
 			</div>
 			<hr>
 			<div class="dropdown">
-				<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle txt-color" data-bs-toggle="dropdown" aria-expanded="false">
+				<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle txt-color" @click="opcionesUsuario = !opcionesUsuario" @focusout="quitarOpcionesUsuario" >
 					<i class="bi bi-gear-fill"></i> 
 					<strong class="email-usuario" style="padding-left: 5px;">{{ user.email.includes("@unitec.edu.hn") ? (user.email).replace("@unitec.edu.hn", "") : (user.email).replace("@unitec.edu","") }}</strong>
 				</a>
-				<ul class="dropdown-menu text-small shadow bg-tema" style="">
+				<ul class="dropdown-menu text-small shadow bg-tema" :style="opcionesUsuario && 'display: block; position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(0px, -26px);'">
 					<li><TemaColor /></li>
 					<li><a class="dropdown-item txt-color" href="#" @click="rutaCambiarContra">Cambiar Contraseña</a></li>
 					<li><hr class="dropdown-divider"></li>

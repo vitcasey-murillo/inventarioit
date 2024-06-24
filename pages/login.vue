@@ -18,6 +18,7 @@ const inputEmail = ref("");
 const inputPassword = ref("");
 
 async function signIn() {
+	mandarMensaje(1, "Conectando...");
 	try {
 		const { data, error } = await client.auth.signInWithPassword({
 			email: inputEmail.value,

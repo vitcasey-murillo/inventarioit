@@ -77,7 +77,7 @@ const opcionesUsuario = ref(false);
 function quitarOpcionesUsuario(){
 	setTimeout(()=> {
 		opcionesUsuario.value = false
-	},100)
+	},200)
 }
 
 
@@ -217,7 +217,7 @@ const controlConfirm = ref({
 
 
 body .bg-tema{
-	background-color: #F8F9FA;	
+	background-color: #fff;	
 }
 
 

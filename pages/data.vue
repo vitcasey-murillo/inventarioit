@@ -46,7 +46,7 @@ async function insertarEnData(valorSelect, valorInput) {
 
 async function eliminarData(id) {
 	console.log("intenta eliminar id", id)
-	let confirmar = await controlModalConfirmar("¿Está seguro que desea borrar el registro? \n\nEliminar un dato conlleva en que los activos que lo poseean se les quitará ese valor.");
+	let confirmar = await controlModalConfirmar("¿Está seguro que desea borrar el registro? \n\nEliminar un dato conlleva en que los activos que lo posean se les quitará ese valor.");
 
 	if (confirmar) {
 		const { error } = await client.from("data").delete().eq("id", id);
@@ -130,7 +130,7 @@ const controlConfirm = ref({
 		</nav>
 
 		
-		<i style="font-size: 0.9em; color: red">*Eliminar un dato conlleva en que los activos que lo poseean se les quitará ese valor y no es reversible.</i>
+		<i style="font-size: 0.9em; color: red">*Eliminar un dato conlleva en que los activos que lo posean se les quitará ese valor y no es reversible.</i>
 		<br />
 
 		<div class="container" style="width: 100%; margin: 0;">

@@ -185,6 +185,12 @@ const controlConfirm = ref({
 				</NuxtLink>
 			</li>
 			<li>
+				<NuxtLink to="/reports" :class="brindarClase('/reports')">
+					<i class="bi bi-clipboard2-data-fill"></i>
+				<span>Reportes</span>
+				</NuxtLink>
+			</li>
+			<li>
 				<NuxtLink to="/data" :class="brindarClase('/data')">
 					<i class="bi bi-bookmark-check-fill"></i>
 				<span>Data</span>

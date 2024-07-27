@@ -38,7 +38,7 @@ const activosFiltradosPorTipo = ref([]);
 function filtroTip(){
 	let res = filtroTipo.value == "--Todos--"? activosTotales.value : activosTotales.value.filter((x)=> x.tipo == filtroTipo.value)
 	
-	res = filtroMarca.value == "--Todos--" || filtroMarca.value == "" ? res : activosTotales.value.filter((x)=> x.marca == filtroMarca.value)
+	res = filtroMarca.value == "--Todos--" || filtroMarca.value == "" ? res : res.value.filter((x)=> x.marca == filtroMarca.value)
 
 	activosFiltradosPorTipo.value = Array.from(res.map((x)=> JSON.parse(JSON.stringify(x)) )); 
 }

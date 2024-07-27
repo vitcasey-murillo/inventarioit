@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-	middleware: "auth",
+  middleware: "auth",
 });
 
 const client = useSupabaseClient();
@@ -8,16 +8,16 @@ const client = useSupabaseClient();
 const dominioUniversitario = "@unitec.edu.hn";
 
 let objetoActivo = ref({
-	marca: "",
-	modelo: "",
-	serial: "",
-	tipo: "",
-	discoDuro: "",
-	ram: "",
-	procesador: "",
-	ubicacion: "",
-	estado: "",
-	asignado: "",
+  marca: "",
+  modelo: "",
+  serial: "",
+  tipo: "",
+  discoDuro: "",
+  ram: "",
+  procesador: "",
+  ubicacion: "",
+  estado: "",
+  asignado: "",
 });
 
 let arrMarca = ref([]);
@@ -25,121 +25,115 @@ let arrUbicacion = ref([]);
 let arrTipo = ref([]);
 let arrEstado = ref([]);
 let arrBloquearCamposPara = [
-"",
-"Batería",
-"Cámara",
-"Impresora",
-"Impresora de Carnet",
-"Monitor",
-"Proyector",
-"Router",
-"Switch"
+  "",
+  "Batería",
+  "Cámara",
+  "Impresora",
+  "Impresora de Carnet",
+  "Monitor",
+  "Proyector",
+  "Router",
+  "Switch",
 ];
 
-
 async function cargarDataParametros() {
-	const { data } = await client.from("data").select("*");
+  const { data } = await client.from("data").select("*");
 
-	if (data != null) {
-		data.forEach((x) => {
-			if (x.tipo == "Marca") arrMarca.value.push(x.valor);
-			else if (x.tipo == "Ubicacion") arrUbicacion.value.push(x.valor);
-			else if (x.tipo == "Tipo") arrTipo.value.push(x.valor);
-			else if (x.tipo == "Estado") arrEstado.value.push(x.valor);
-		});
-	}
+  if (data != null) {
+    data.forEach((x) => {
+      if (x.tipo == "Marca") arrMarca.value.push(x.valor);
+      else if (x.tipo == "Ubicacion") arrUbicacion.value.push(x.valor);
+      else if (x.tipo == "Tipo") arrTipo.value.push(x.valor);
+      else if (x.tipo == "Estado") arrEstado.value.push(x.valor);
+    });
+  }
 
-	arrMarca.value = arrMarca.value.sort((a, b) => a.localeCompare(b));
-	arrUbicacion.value = arrUbicacion.value.sort((a, b) => a.localeCompare(b));
-	arrTipo.value = arrTipo.value.sort((a, b) => a.localeCompare(b));
-	arrEstado.value = arrEstado.value.sort((a, b) => a.localeCompare(b));
+  arrMarca.value = arrMarca.value.sort((a, b) => a.localeCompare(b));
+  arrUbicacion.value = arrUbicacion.value.sort((a, b) => a.localeCompare(b));
+  arrTipo.value = arrTipo.value.sort((a, b) => a.localeCompare(b));
+  arrEstado.value = arrEstado.value.sort((a, b) => a.localeCompare(b));
 }
 cargarDataParametros();
 
 async function InsertarActivo(e) {
-	e.preventDefault();
+  e.preventDefault();
 
-	if (objetoActivo.value.marca.length == 0) {
-		await controlModal("El campo 'marca' no es valido!");
-		return;
-	}
+  if (objetoActivo.value.marca.length == 0) {
+    await controlModal("El campo 'marca' no es valido!");
+    return;
+  }
 
-	if (objetoActivo.value.modelo.length == 0) {
-		await controlModal("El campo 'modelo' no es valido!");
-		return;
-	}
+  if (objetoActivo.value.modelo.length == 0) {
+    await controlModal("El campo 'modelo' no es valido!");
+    return;
+  }
 
-	if (objetoActivo.value.tipo.length == 0) {
-		await controlModal("El campo 'tipo' no es valido!");
-		return;
-	}
+  if (objetoActivo.value.tipo.length == 0) {
+    await controlModal("El campo 'tipo' no es valido!");
+    return;
+  }
 
-	if (objetoActivo.value.ubicacion.length == 0) {
-		await controlModal("El campo 'ubicacion' no es valido!");
-		return;
-	}
+  if (objetoActivo.value.ubicacion.length == 0) {
+    await controlModal("El campo 'ubicacion' no es valido!");
+    return;
+  }
 
-	if (objetoActivo.value.estado.length == 0) {
-		await controlModal("El campo 'estado' no es valido!");
-		return;
-	}
+  if (objetoActivo.value.estado.length == 0) {
+    await controlModal("El campo 'estado' no es valido!");
+    return;
+  }
 
-	objetoActivo.value.asignado += dominioUniversitario;
+  objetoActivo.value.asignado += dominioUniversitario;
 
-	console.log("objetoActivo", objetoActivo.value)
+  console.log("objetoActivo", objetoActivo.value);
 
-
-	const { error } = await client.from("activo").insert(objetoActivo.value);
-	if (error == null) {
-		setTimeout(async() => {
-			await controlModal("Activo Creado!", "success");
-			navigateTo("/activos");
-		}, 0);
-		//cargarInformacionValores();
-	} else await controlModal(error.message);
-
+  const { error } = await client.from("activo").insert(objetoActivo.value);
+  if (error == null) {
+    setTimeout(async () => {
+      await controlModal("Activo Creado!", "success");
+      navigateTo("/activos");
+    }, 0);
+    //cargarInformacionValores();
+  } else await controlModal(error.message);
 }
-
 
 // CONTROL MODALES
 
-async function controlModal(mensaje, tipo = "danger"){
-	return new Promise((resolve)=>{
+async function controlModal(mensaje, tipo = "danger") {
+  return new Promise((resolve) => {
+    controlAlert.value.accion = () => {
+      controlAlert.value.visulizar = false;
+      resolve();
+    };
 
-		controlAlert.value.accion = ()=>{
-			controlAlert.value.visulizar = false;
-			resolve();
-		};
-
-		controlAlert.value.tipo = tipo;
-		controlAlert.value.mensaje = mensaje;
-		controlAlert.value.visulizar = true;
-	});
+    controlAlert.value.tipo = tipo;
+    controlAlert.value.mensaje = mensaje;
+    controlAlert.value.visulizar = true;
+  });
 }
 
 const desactivarCampos = ref(false);
-async function revisarCampos(){
-	desactivarCampos.value = arrBloquearCamposPara.includes(objetoActivo.value.tipo);
-	if(desactivarCampos.value)
-	{
-		objetoActivo.value.discoDuro = "";
-		objetoActivo.value.ram = "";
-		objetoActivo.value.procesador = "";
-	}
-
+async function revisarCampos() {
+  desactivarCampos.value = arrBloquearCamposPara.includes(
+    objetoActivo.value.tipo
+  );
+  if (desactivarCampos.value) {
+    objetoActivo.value.discoDuro = "";
+    objetoActivo.value.ram = "";
+    objetoActivo.value.procesador = "";
+  }
 }
 
-
-watch(objetoActivo.value,()=>{
-	revisarCampos();
-})
+watch(objetoActivo.value, () => {
+  revisarCampos();
+});
 
 const controlAlert = ref({
-	visulizar: false,
-	tipo: "danger",
-	titulo: "Agregar",
-	mensaje: "",
-	accion: ()=>{}
+  visulizar: false,
+  tipo: "danger",
+  titulo: "Agregar",
+  mensaje: "",
+  accion: () => {},
 });
 </script>
 <template>
@@ -206,7 +200,7 @@ const controlAlert = ref({
               id=""
               class="form-control"
               v-model="objetoActivo.tipo"
-			  required
+              required
             >
               <template v-for="tipo of arrTipo">
                 <option :value="tipo">{{ tipo }}</option>
@@ -223,7 +217,7 @@ const controlAlert = ref({
               class="form-control"
               v-model="objetoActivo.discoDuro"
               placeholder="256GB SSD"
-			  :disabled="desactivarCampos"
+              :disabled="desactivarCampos"
             />
           </label>
           <br />
@@ -236,7 +230,7 @@ const controlAlert = ref({
               class="form-control"
               v-model="objetoActivo.ram"
               placeholder="8GB"
-			  :disabled="desactivarCampos"
+              :disabled="desactivarCampos"
             />
           </label>
           <br />
@@ -249,7 +243,7 @@ const controlAlert = ref({
               class="form-control"
               v-model="objetoActivo.procesador"
               placeholder="i5 8va"
-			  :disabled="desactivarCampos"
+              :disabled="desactivarCampos"
             />
           </label>
         </fieldset>
